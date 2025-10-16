@@ -3,7 +3,7 @@ info:
   title: Send SMS
   version: 1.1.0
   description: |
-    ## Send SMS (HTTP API)
+    ## Send SMS when we want (HTTP API)
 
     This is a MT (Mobile Terminated) messaging API.
     With this API you can send and personalize SMS messages, use message templates and receive delivery reports.
@@ -773,6 +773,6 @@ components:
     BearerAuth:
       type: http
       scheme: bearer
-      description: 'Note: In old versions of documentation we used “apikey” in Authorization headers. You can still continue using apikey in Authorization but we recommend using “Bearer” in new integrations. Bearer Token is the same as Apikey, which you can find from the UI.'
+      description: 'Note: In old versions2 of documentation we used “apikey” in Authorization headers. You can still continue using apikey in Authorization but we recommend using “Bearer” in new integrations. Bearer Token is the same as Apikey, which you can find from the UI.'
 security:
   - BearerAuth: [ ]
