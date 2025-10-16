@@ -1,0 +1,143 @@
+{
+  "collapseTableOfContents": true,
+  "items": [
+    {
+      "type": "item",
+      "title": "Getting Started",
+      "uri": "/docs/getting-started.md",
+      "slug": "getting-started"
+    },
+    {
+      "type": "item",
+      "title": "Sign Up",
+      "uri": "https://quriiri.fi/kokeile-ilmaiseksi?utm_source=stoplight&utm_medium=stoplight_home&utm_id=stoplightdocs"
+    },
+    {
+      "type": "divider",
+      "title": "APIs"
+    },
+    {
+      "title": "SMS API",
+      "type": "group",
+      "slug": "sms-api",
+      "items": [
+        {
+          "title": "Send SMS",
+          "type": "item",
+          "uri": "mtapi.yaml",
+          "slug": "send-sms",
+          "operationSlugs": {
+            "sendMessagePost": "send-message-post",
+            "sendMessageGet": "send-message-get"
+          }
+        },
+        {
+          "title": "Receive SMS",
+          "type": "item",
+          "uri": "moapi.yaml",
+          "slug": "receive-sms"
+        },
+        {
+          "title": "Receive SMS PULL Mode",
+          "type": "item",
+          "uri": "mopullapi.yaml",
+          "slug": "pull-sms"
+        },
+        {
+          "title": "NPS survey",
+          "type": "item",
+          "uri": "/applications/nps-survey.json",
+          "slug": "nps-survey"
+        },
+        {
+          "title": "Dialog API (Custom SMS Survey)",
+          "type": "item",
+          "uri": "appapi.yaml",
+          "slug": "dialog"
+        },
+        {
+          "title": "Verify",
+          "type": "item",
+          "uri": "/applications/verify-api.yaml",
+          "slug": "verify"
+        },
+        {
+          "title": "Message status",
+          "type": "item",
+          "uri": "/message_status/message-status-api.json",
+          "slug": "message-status"
+        },
+        {
+          "type": "item",
+          "title": "SMPP",
+          "uri": "/docs/smpp-api.md"
+        },
+        {
+          "type": "item",
+          "title": "SMTP",
+          "uri": "/docs/smtp-api.md"
+        },
+        {
+          "type": "item",
+          "title": "Messaging status information",
+          "uri": "/docs/messaging-information.md"
+        }
+      ]
+    },
+    {
+      "title": "Groups and Contacts API",
+      "type": "group",
+      "slug": "groups-api",
+      "items": [
+        {
+          "title": "Groups",
+          "type": "item",
+          "uri": "groupsapi.yaml",
+          "slug": "groups"
+        }
+      ]
+    },
+    {
+      "title": "RCS API",
+      "type": "group",
+      "slug": "rcs-api",
+      "items": [
+        {
+          "title": "Send RCS",
+          "type": "item",
+          "uri": "/rcs/rcs-mt-api.json",
+          "slug": "send-rcs"
+        }
+      ]
+    },
+    {
+      "type": "divider",
+      "title": "INTEGRATIONS"
+    },
+    {
+      "title": "Zapier",
+      "type": "group",
+      "slug": "zapier-api",
+      "items": [
+        {
+          "title": "Getting started",
+          "type": "item",
+          "uri": "/docs/zapier-getting-started.md",
+          "slug": "zapier-getting-started"
+        },
+        {
+          "title": "Make an automation",
+          "type": "item",
+          "uri": "/docs/zapier-make-an-automation.md",
+          "slug": "zapier-make-an-automation"
+        },
+        {
+          "title": "General help",
+          "type": "item",
+          "uri": "/docs/zapier-general-help.md",
+          "slug": "zapier-general-help"
+        }
+      ]
+    }
+  ]
+}

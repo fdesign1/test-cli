@@ -1,0 +1,778 @@
+openapi: 3.1.0
+info:
+  title: Send SMS
+  version: 1.1.0
+  description: |
+    ## Send SMS (HTTP API)
+
+    This is a MT (Mobile Terminated) messaging API.
+    With this API you can send and personalize SMS messages, use message templates and receive delivery reports.
+  
+    ### Follow the steps below to learn how to quickly start sending messages using the Quriiri SMS API:
+  
+    1. Login to Quriiri and navigate to **Message Router** > **Routings**
+    
+    2. Create a new routing **HTTP** → **SMS**
+    
+    3. Copy the HTTP url. You can find the url in the Quriiri user interface under **Message Router** > **Resources**
+    
+    4. Copy the API key. You can find all API keys in the Quriiri user interface under **Management** > **API keys**.
+    
+    Replace all https://example.com parts in any URLs with the API url. Replace the 'Authorization: Bearer 123' number with your API key.
+servers:
+  - url: https://example.com
+    description: |
+      Replace https://example.com with HTTP common API url from the UI - Message Router - Resources
+tags:
+  - name: Send message
+  - name: Cancel scheduled message
+  - name: Delivery reports
+paths:
+  /v1/:
+    post:
+      operationId: sendMessagePost
+      description: |
+        Send a message to the specified recipients using HTTP POST. Use JSON data in message body.
+      summary: Send message
+      security:
+        - BearerAuth: [ ]
+      tags:
+        - Send message
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestData'
+      responses:
+        '200':
+          description: Request processed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: object
+                    properties:
+                      <recipient_mobile_number>:
+                        $ref: '#/components/schemas/Message'
+                  warnings:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Error'
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Error'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PlainTextResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Error'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PlainTextResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Error'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PlainTextResponse'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Error'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PlainTextResponse'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Error'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PlainTextResponse'
+        '411':
+          description: Length Required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Error'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PlainTextResponse'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Error'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PlainTextResponse'
+    get:
+      operationId: "sendMessageGet"
+      summary: Send message using GET
+      description: |
+        Send a message to the specified recipients using HTTP GET. Use form data in query string
+      tags:
+        - Send message
+      parameters:
+        - $ref: '#/components/parameters/Sender'
+        - $ref: '#/components/parameters/SenderType'
+        - $ref: '#/components/parameters/Destination'
+        - $ref: '#/components/parameters/Text'
+        - $ref: '#/components/parameters/Data'
+        - $ref: '#/components/parameters/UDH'
+        - $ref: '#/components/parameters/Flash'
+        - $ref: '#/components/parameters/BatchId'
+        - $ref: '#/components/parameters/BillingRef'
+        - $ref: '#/components/parameters/DrUrl'
+        - $ref: '#/components/parameters/DrType'
+        - $ref: '#/components/parameters/Validity'
+        - $ref: '#/components/parameters/ScheduleTime'
+      responses:
+        '200':
+          description: Request processed
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PlainTextResponse'
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Message'
+                  warnings:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Error'
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PlainTextResponse'
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PlainTextResponse'
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PlainTextResponse'
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PlainTextResponse'
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Error'
+        '411':
+          description: Length Required
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PlainTextResponse'
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Error'
+        '415':
+          description: Unsupported Media Type
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PlainTextResponse'
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Error'
+    delete:
+      operationId: cancelMessage
+      summary: Cancel message
+      description: You can cancel a scheduled message
+      tags:
+        - Cancel scheduled message
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                messageid:
+                  $ref: '#/components/schemas/MessageId'
+              required:
+                - messageid
+      responses:
+        '200':
+          description: Request processed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Message'
+                  warnings:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Error'
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Error'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PlainTextDeleteResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Error'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PlainTextDeleteResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Error'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PlainTextDeleteResponse'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Error'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PlainTextDeleteResponse'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Error'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PlainTextDeleteResponse'
+        '411':
+          description: Length Required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Error'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PlainTextDeleteResponse'
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Error'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PlainTextDeleteResponse'
+  /your-path:
+    servers:
+      - url: 'https://your-domain.com'
+        description: 'Replace your-domain.com and your-path with your application urls'
+    post:
+      security: [ ]
+      operationId: sendDeliveryReportPost
+      summary: Send delivery report
+      description: Requests are made to your application when Send message reaches its final status
+      tags:
+        - Delivery reports
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sender:
+                  $ref: '#/components/schemas/Sender'
+                destination:
+                  $ref: '#/components/schemas/Destination'
+                batchid:
+                  $ref: '#/components/schemas/BatchId'
+                billingref:
+                  $ref: '#/components/schemas/BillingRef'
+                status:
+                  $ref: '#/components/schemas/Status'
+                reason:
+                  $ref: '#/components/schemas/Reason'
+                statustime:
+                  $ref: '#/components/schemas/StatusTime'
+                smscount:
+                  $ref: '#/components/schemas/SmsCount'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RequestData'
+      responses:
+        2XX:
+          $ref: '#/components/responses/2XX'
+        4XX:
+          $ref: '#/components/responses/4XX'
+        5XX:
+          $ref: '#/components/responses/5XX'
+    get:
+      security: [ ]
+      operationId: sendDeliveryReportGet
+      summary: Send delivery report
+      description: Requests are made to your application when Send message reaches its final status
+      tags:
+        - Delivery reports
+      parameters:
+        - $ref: '#/components/parameters/Sender'
+        - $ref: '#/components/parameters/Destination'
+        - $ref: '#/components/parameters/BatchId'
+        - $ref: '#/components/parameters/BillingRef'
+        - $ref: '#/components/parameters/Status'
+        - $ref: '#/components/parameters/Reason'
+        - $ref: '#/components/parameters/SmsCount'
+      responses:
+        2XX:
+          $ref: '#/components/responses/2XX'
+        4XX:
+          $ref: '#/components/responses/4XX'
+        5XX:
+          $ref: '#/components/responses/5XX'
+components:
+  responses:
+    '2XX':
+      description: Responses with status code 2XX will be considered successful
+    '4XX':
+      description: Responses with status code 4XX will be considered syntax errors and thus will not be retried
+    '5XX':
+      description: Responses with status code 5XX will be retried 3 times within 3 minutes
+  schemas:
+    PlainTextResponse:
+      type: string
+      example: 'error: <error message>
+        <...possibly more errors here...>
+        warning: warning message
+        <...possibly more warnings here...>
+        <destination>: <converted> <status> <optional reason or message id>
+        <...possibly more messages here...>'
+    PlainTextDeleteResponse:
+      type: string
+      example: 'error: <error message>
+        <...possibly more errors here...>
+        warning: warning message
+        <...possibly more warnings here...>'
+    Sender:
+      type: string
+      description: 'Message sender. International numbers with + or 00 prefix and 5 to 15 numbers following it, national ones / shortcodes with 1 to 15 numbers, alphanumeric with max 11 characters. Although other characters may work, we cannot guarantee it and recommend restricting the characters used in alphanumeric senders to letters A-Z and a-z, and digits 0-9.'
+    SenderType:
+      type: string
+      enum:
+        - MSISDN
+        - NATIONAL
+        - ALNUM
+      description: 'Sender type; MSISDN (international number), NATIONAL (national number / shortcode), ALNUM (alphanumeric); if missing, an attempt is made to guess one from the sender, and guess failure results in an error.'
+    Destination:
+      type: [string, array]
+      format: msisdn
+      description: 'Message destination number in international or national format. International numbers should begin with "+" or "00" prefix and national format numbers will be converted to Finnish ones. For maximum reliability, we recommend using only international format numbers, with nothing but digits following the international prefix. The HTTP response contains information about which international number each accepted destination was converted to or treated as. Accepts multiple values in a JSON array, set multiple times with GET query parameters.'
+    Data:
+      type: string
+      description: 'Binary message data, bytes encoded as hexadecimal characters. Optional, but either data or text is required. If text is provided, data is ignored. Maximum number of bytes in udh and data combined is 140.'
+    Text:
+      type: string
+      description: 'Message text. Based on the text, the service automatically determines whether the message can be sent using the GSM character set or if sending it as Unicode is required. Also, the service determines automatically how many SMS messages sending the message will require. The general rule of thumb is that the first SMS using the GSM character set can hold up to 160 characters; if there are more, concatenation is required and each SMS (including the first one) can hold up to 153 characters. Note that some characters in the GSM character set will consume two characters instead of one. For Unicode, the corresponding numbers are 70 and 67. Optional, but either text or data is required. If text is provided, data is ignored. Message templates can be used by finding the template ID from the UI and using {template_ID} placeholder, e.g. "Hello ${template_361}!"'
+    UDH:
+      type: string
+      format: hex
+      description: 'User data header, bytes encoded as hexadecimal characters. Maximum number of bytes in udh and data combined is 140. Note that concatenated text messages may be sent using the entire message context in the text parameter, without setting udh, and the service will take care of splitting the message into appropriately sized parts.'
+    BillingRef:
+      type: string
+      description: 'Billing reference, max 255 characters. This is solely for the API user, the service does not do anything else with it besides relaying it back in corresponding delivery reports.'
+    BatchId:
+      type: string
+      description: 'Batch ID, max 255 characters. Used to group interrelated messages, for example if some special actions should be taken to a group of separately sent but logically related messages. Under normal circumstances, the service does not use this parameter but just relays it back in corresponding delivery reports.'
+    DrUrl:
+      type: string
+      format: url
+      description: 'Delivery report URL. URL where to relay delivery reports. To use authenticated URLs for DRs set up the authentication in the UI message router.'
+    DrType:
+      type: string
+      enum:
+        - JSON
+        - POST
+        - GET
+      description: 'Delivery report type; JSON, POST, or GET, similarly as for supported API request types. Defaults to the format of the API request.'
+    Flash:
+      type: boolean
+      default: false
+      description: 'Send a "flash" SMS if set to true, on, yes, or a number greater than 0.'
+    Validity:
+      type: integer
+      minimum: 1
+      maximum: 32767
+      example: 360
+      description: 'Validity period of the message in minutes. If not set, defaults to the value set in your account details.'
+    MessageId:
+      type: string
+      description: Messageid of a scheduled message. Messageid is returned in Send message api response
+    ScheduleTime:
+      type: string
+      format: date-time
+      description: 'Schedule time can be used for message scheduling. If a message is scheduled, the API response contains messageid for later message cancellation, if needed. Schedule time must be set in RFC 3339 format, ie. 2020-05-31T04:20:03Z . In scheduling the seconds and milliseconds are ignored, so every scheduled message is sent in a resolution of minutes.'
+    Status:
+      type: string
+      enum:
+        - FAILED
+        - DELIVERED
+    Reason:
+      type: string
+      description: Reason for failed message
+      enum:
+        - BUFFERED
+        - EXPIRED
+        - CANCELED
+        - FILTERED
+        - INVALID
+        - SCHEDULED
+        - TERMINAL_ERROR
+        - CARRIER_ERROR
+        - BILLING_ERROR
+        - SEND_ERROR
+        - LIMIT_EXCEEDED
+        - RESTRICTED
+        - UNKNOWN_NUMBER
+        - ABSENT_SUBSCRIBER
+        - SUBSCRIBER_ERROR
+        - UNKNOWN_ERROR
+    StatusTime:
+      type: string
+      format: date-time
+    SmsCount:
+      type: string
+      description: Amount of SMS messages used to send the message. Please see Text schema for detailed information about the character count in SMS messages.
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+    Message:
+      type: object
+      required: ["converted", "status", "messageid"]
+      properties:
+        converted:
+          type: string
+          format: msisdn
+        status:
+          $ref: '#/components/schemas/Status'
+        reason:
+          $ref: '#/components/schemas/Reason'
+        messageid:
+          $ref: '#/components/schemas/MessageId'
+    RequestData:
+      type: object
+      properties:
+        sender:
+          $ref: '#/components/schemas/Sender'
+        sendertype:
+          $ref: '#/components/schemas/SenderType'
+        destination:
+          $ref: '#/components/schemas/Destination'
+        text:
+          $ref: '#/components/schemas/Text'
+        data:
+          $ref: '#/components/schemas/Data'
+        udh:
+          $ref: '#/components/schemas/UDH'
+        batchid:
+          $ref: '#/components/schemas/BatchId'
+        billingref:
+          $ref: '#/components/schemas/BillingRef'
+        drurl:
+          $ref: '#/components/schemas/DrUrl'
+        drtype:
+          $ref: '#/components/schemas/DrType'
+        flash:
+          $ref: '#/components/schemas/Flash'
+        validity:
+          $ref: '#/components/schemas/Validity'
+        scheduletime:
+          $ref: '#/components/schemas/ScheduleTime'
+      required:
+        - sender
+        - destination
+        - text
+  parameters:
+    Sender:
+      in: query
+      name: sender
+      required: true
+      schema:
+        type: string
+      description: 'Message sender. International numbers with + or 00 prefix and 5 to 15 numbers following it, national ones / shortcodes with 1 to 15 numbers, alphanumeric with max 11 characters. Although other characters may work, we cannot guarantee it and recommend restricting the characters used in alphanumeric senders to letters A-Z and a-z, and digits 0-9.'
+    SenderType:
+      in: query
+      name: sendertype
+      required: false
+      schema:
+        type: string
+      description: 'Sender type; MSISDN (international number), NATIONAL (national number / shortcode), ALNUM (alphanumeric); if missing, an attempt is made to guess one from the sender, and guess failure results in an error'
+    Destination:
+      in: query
+      name: destination
+      required: true
+      schema:
+        type: string
+      description: 'Message destination number in international or national format. International numbers should begin with + or 00 prefix and national format numbers will be converted to Finnish ones. For maximum reliability, we recommend using only international format numbers, with nothing but digits following the international prefix. The HTTP response contains information about which international number each accepted destination was converted to or treated as. Accepts multiple values array in JSON, set multiple times with form POST and GET.'
+    Text:
+      in: query
+      name: text
+      required: true
+      schema:
+        type: string
+      description: 'Message text. Based on the text, the service automatically determines whether the message can be sent using the GSM character set or if sending it as Unicode is required. Also, the service determines automatically how many SMS messages sending the message will require. The general rule of thumb is that the first SMS using the GSM character set can hold up to 160 characters; if there are more, concatenation is required and each SMS (including the first one) can hold up to 153 characters. Note that some characters in the GSM character set will consume two characters instead of one. For Unicode, the corresponding numbers are 70 and 67. Optional, but either text or data is required. If text is provided, data is ignored. Message templates can be used by finding the template ID from the UI and using {template_ID} placeholder, e.g. "Hello ${template_361}!"'
+    UDH:
+      in: query
+      name: udh
+      required: false
+      schema:
+        type: string
+        format: hex
+      description: 'User data header, bytes encoded as hexadecimal characters. Maximum number of bytes in udh and data combined is 140. Note that concatenated text messages may be sent using the entire message context in the text parameter, without setting udh, and the service will take care of splitting the message into appropriately sized parts.'
+    Flash:
+      in: query
+      name: flash
+      required: false
+      schema:
+        type: boolean
+      description: 'Send a "flash" SMS if set to true, on, yes, or a number greater than 0.'
+    Data:
+      in: query
+      name: data
+      required: false
+      schema:
+        type: string
+      description: 'Binary message data, bytes encoded as hexadecimal characters. Optional, but either data or text is required. If text is provided, data is ignored. Maximum number of bytes in udh and data combined is 140.'
+    BatchId:
+      in: query
+      name: batchid
+      required: false
+      schema:
+        type: string
+      description: 'Batch ID, max 255 characters. Used to group interrelated messages, for example if some special actions should be taken to a group of separately sent but logically related messages. Under normal circumstances, the service does not use this parameter but just relays it back in corresponding delivery reports.'
+    BillingRef:
+      in: query
+      name: billingref
+      required: false
+      schema:
+        type: string
+      description: 'Billing reference, max 255 characters. This is solely for the API user, the service does not do anything else with it besides relaying it back in corresponding delivery reports.'
+    DrUrl:
+      in: query
+      name: drurl
+      required: false
+      schema:
+        type: string
+      description: 'Delivery report URL. URL where to relay delivery reports'
+    DrType:
+      in: query
+      name: drtype
+      required: false
+      schema:
+        type: string
+      description: 'Delivery report type; JSON, POST, or GET, similarly as for supported API request types. Defaults to the format of the API request.'
+    Validity:
+      in: query
+      name: validity
+      required: false
+      schema:
+        type: string
+      description: 'Validity period of the message in minutes. If not set, defaults to the value set in your account details.'
+    ScheduleTime:
+      in: query
+      name: scheduletime
+      required: false
+      schema:
+        type: string
+      description: 'Schedule time can be used for message scheduling. If a message is scheduled, the API response contains messageid for later message cancellation, if needed. Schedule time must be set in RFC 3339 format, ie. 2020-05-31T04:20:03Z . In scheduling the seconds and milliseconds are ignored, so every scheduled message is sent in a resolution of minutes.'
+    Status:
+      in: query
+      name: status
+      required: false
+      schema:
+        type: string
+        enum:
+          - FAILED
+          - DELIVERED
+      description: 'Final delivery status'
+    Reason:
+      in: query
+      name: reason
+      required: false
+      schema:
+        type: string
+        enum:
+          - BUFFERED
+          - EXPIRED
+          - CANCELED
+          - FILTERED
+          - INVALID
+          - SCHEDULED
+          - TERMINAL_ERROR
+          - CARRIER_ERROR
+          - BILLING_ERROR
+          - SEND_ERROR
+          - LIMIT_EXCEEDED
+          - RESTRICTED
+          - UNKNOWN_NUMBER
+          - ABSENT_SUBSCRIBER
+          - SUBSCRIBER_ERROR
+          - UNKNOWN_ERROR
+      description: 'Reason for the delivery status'
+    SmsCount:
+      in: query
+      name: smscount
+      required: false
+      schema:
+        type: string
+      description: Amount of SMS messages used to send the message. Please see Text schema for detailed information about the character count in SMS messages.
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: 'Note: In old versions of documentation we used “apikey” in Authorization headers. You can still continue using apikey in Authorization but we recommend using “Bearer” in new integrations. Bearer Token is the same as Apikey, which you can find from the UI.'
+security:
+  - BearerAuth: [ ]
