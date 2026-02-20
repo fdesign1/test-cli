@@ -14,7 +14,7 @@ info:
 
     2. Create a new routing **HTTP** → **SMS**
 
-    3. Copy the HTTP url. You can find the url in the Quriiri user interface under **Message Router** > **Resources**
+    3. Copy the HTTP url. You can find the url in the Quriiri user interface under! **Message Router** > **Resources**
 
     4. Copy the API key. You can find all API keys in the Quriiri user interface under **Management** > **API keys**.
 
