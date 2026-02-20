@@ -7,20 +7,21 @@ info:
 
     This is a MT (Mobile Terminated) messaging API.
     With this API you can send and personalize SMS messages, use message templates and receive delivery reports.
-  
+
     ### Follow the steps below to learn how to quickly start sending messages using the Quriiri SMS API:
-  
+
     1. Login to Quriiri and navigate to **Message Router** > **Routings**
-    
+
     2. Create a new routing **HTTP** → **SMS**
-    
+
     3. Copy the HTTP url. You can find the url in the Quriiri user interface under **Message Router** > **Resources**
-    
+
     4. Copy the API key. You can find all API keys in the Quriiri user interface under **Management** > **API keys**.
-    
+
     Replace all https://example.com parts in any URLs with the API url. Replace the 'Authorization: Bearer 123' number with your API key.
+  summary: Test api!
 servers:
-  - url: https://example.com
+  - url: 'https://example.com'
     description: |
       Replace https://example.com with HTTP common API url from the UI - Message Router - Resources
 tags:
@@ -35,7 +36,7 @@ paths:
         Send a message to the specified recipients using HTTP POST. Use JSON data in message body.
       summary: Send message
       security:
-        - BearerAuth: [ ]
+        - BearerAuth: []
       tags:
         - Send message
       requestBody:
@@ -153,7 +154,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/PlainTextResponse'
     get:
-      operationId: "sendMessageGet"
+      operationId: sendMessageGet
       summary: Send message using GET
       description: |
         Send a message to the specified recipients using HTTP GET. Use form data in query string
@@ -407,9 +408,9 @@ paths:
   /your-path:
     servers:
       - url: 'https://your-domain.com'
-        description: 'Replace your-domain.com and your-path with your application urls'
+        description: Replace your-domain.com and your-path with your application urls
     post:
-      security: [ ]
+      security: []
       operationId: sendDeliveryReportPost
       summary: Send delivery report
       description: Requests are made to your application when Send message reaches its final status
@@ -449,7 +450,7 @@ paths:
         5XX:
           $ref: '#/components/responses/5XX'
     get:
-      security: [ ]
+      security: []
       operationId: sendDeliveryReportGet
       summary: Send delivery report
       description: Requests are made to your application when Send message reaches its final status
@@ -472,27 +473,19 @@ paths:
           $ref: '#/components/responses/5XX'
 components:
   responses:
-    '2XX':
+    2XX:
       description: Responses with status code 2XX will be considered successful
-    '4XX':
+    4XX:
       description: Responses with status code 4XX will be considered syntax errors and thus will not be retried
-    '5XX':
+    5XX:
       description: Responses with status code 5XX will be retried 3 times within 3 minutes
   schemas:
     PlainTextResponse:
       type: string
-      example: 'error: <error message>
-        <...possibly more errors here...>
-        warning: warning message
-        <...possibly more warnings here...>
-        <destination>: <converted> <status> <optional reason or message id>
-        <...possibly more messages here...>'
+      example: 'error: <error message> <...possibly more errors here...> warning: warning message <...possibly more warnings here...> <destination>: <converted> <status> <optional reason or message id> <...possibly more messages here...>'
     PlainTextDeleteResponse:
       type: string
-      example: 'error: <error message>
-        <...possibly more errors here...>
-        warning: warning message
-        <...possibly more warnings here...>'
+      example: 'error: <error message> <...possibly more errors here...> warning: warning message <...possibly more warnings here...>'
     Sender:
       type: string
       description: 'Message sender. International numbers with + or 00 prefix and 5 to 15 numbers following it, national ones / shortcodes with 1 to 15 numbers, alphanumeric with max 11 characters. Although other characters may work, we cannot guarantee it and recommend restricting the characters used in alphanumeric senders to letters A-Z and a-z, and digits 0-9.'
@@ -504,7 +497,9 @@ components:
         - ALNUM
       description: 'Sender type; MSISDN (international number), NATIONAL (national number / shortcode), ALNUM (alphanumeric); if missing, an attempt is made to guess one from the sender, and guess failure results in an error.'
     Destination:
-      type: [string, array]
+      type:
+        - string
+        - array
       format: msisdn
       description: 'Message destination number in international or national format. International numbers should begin with "+" or "00" prefix and national format numbers will be converted to Finnish ones. For maximum reliability, we recommend using only international format numbers, with nothing but digits following the international prefix. The HTTP response contains information about which international number each accepted destination was converted to or treated as. Accepts multiple values in a JSON array, set multiple times with GET query parameters.'
     Data:
@@ -526,7 +521,7 @@ components:
     DrUrl:
       type: string
       format: url
-      description: 'Delivery report URL. URL where to relay delivery reports. To use authenticated URLs for DRs set up the authentication in the UI message router.'
+      description: Delivery report URL. URL where to relay delivery reports. To use authenticated URLs for DRs set up the authentication in the UI message router.
     DrType:
       type: string
       enum:
@@ -591,7 +586,10 @@ components:
         - message
     Message:
       type: object
-      required: ["converted", "status", "messageid"]
+      required:
+        - converted
+        - status
+        - messageid
       properties:
         converted:
           type: string
@@ -706,7 +704,7 @@ components:
       required: false
       schema:
         type: string
-      description: 'Delivery report URL. URL where to relay delivery reports'
+      description: Delivery report URL. URL where to relay delivery reports
     DrType:
       in: query
       name: drtype
@@ -737,7 +735,7 @@ components:
         enum:
           - FAILED
           - DELIVERED
-      description: 'Final delivery status'
+      description: Final delivery status
     Reason:
       in: query
       name: reason
@@ -761,7 +759,7 @@ components:
           - ABSENT_SUBSCRIBER
           - SUBSCRIBER_ERROR
           - UNKNOWN_ERROR
-      description: 'Reason for the delivery status'
+      description: Reason for the delivery status
     SmsCount:
       in: query
       name: smscount
@@ -775,4 +773,4 @@ components:
       scheme: bearer
       description: 'Note: In old versions2 of documentation we used “apikey” in Authorization headers. You can still continue using apikey in Authorization but we recommend using “Bearer” in new integrations. Bearer Token is the same as Apikey, which you can find from the UI.'
 security:
-  - BearerAuth: [ ]
+  - BearerAuth: []
